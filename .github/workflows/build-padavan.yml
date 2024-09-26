@@ -1,55 +1,55 @@
-#修改TNAME: K2P-5.0 中的K2P-5.0为你需要编译的型号，注意名称要与configs/templates/目录下的名字相同
-name: Build Padavan
+#修改TNAME: K2P-5.0 中的K2P-5.0为你需要编译的型号，注意名称要与configs/templates/目录下的名称相同
+名称：建造 Padavan
 
-on: 
-  release:
-    types: [published]
-  push:
-    tags:
-    - 'v*'
-  #  branches: 
-  #    - master
-#  schedule:
-#    - cron: 0 8 * * 5
-  watch:
-    types: [started]
+在：
+  发布：
+    类型：[已发布]
+  推：
+    标签：
+    -'v *'
+  # 分支:
+  ＃ - 掌握＃ - 掌握
+＃ 议程：
+#-cron：0 8 * * 5
+  手表：
+    类型：[已开始]
 
-jobs:
-  build:
-    runs-on: ubuntu-18.04
-    if: github.event.repository.owner.id == github.event.sender.id
+工作：
+  建造：
+    运行于： ubuntu-18.04
+    如果： github.event.repository.owner.id == github.event.sender.id
 
-    steps:
-    - name: Checkout
-      uses: actions/checkout@master
-    - name: Initialization environment
-      env:
-        DEBIAN_FRONTEND: noninteractive
-      run: |
-        sudo apt-get update
-        sudo apt-get -y install unzip libtool-bin curl cmake gperf gawk flex bison nano xxd \
+    步骤：
+    -名称：结帐
+      用途： actions/checkout@master
+    -名称：初始化环境
+      环境：
+        DEBIAN_FRONTEND：非交互式
+      运行：|
+        sudo apt-get 更新
+        sudo apt-get -y 安装解压缩 libtool-bin curl cmake gperf gawk flex bison nano xxd \
         cpio git python-docutils gettext automake autopoint texinfo build-essential help2man \
         pkg-config zlib1g-dev libgmp3-dev libmpc-dev libmpfr-dev libncurses5-dev libltdl-dev gcc-multilib
-    - name: Clone source code
-      run: |
+    -名称：克隆源代码
+      运行：|
         git clone --depth=1 https://github.com/chongshengB/rt-n56u.git /opt/rt-n56u
         cd /opt/rt-n56u/toolchain-mipsel
-        sh dl_toolchain.sh
-        mkdir -p /opt/images/
-    - name: Build Firmware
-      env:
-        TNAME: NETGEAR-BZV
-      run: |
+        复制代码
+        mkdir -p /opt/图像/
+    -名称：构建固件
+      环境：
+        名称： K2P-USB-5.0
+      运行：|
         cd /opt/rt-n56u/trunk
-        if [ ! -f configs/templates/$TNAME.config ] ; then
-        echo "configs/templates/$TNAME.config not found "
-        exit 1
-        fi
-        cp -f configs/templates/$TNAME.config .config
+        如果[ !-f configs/templates/$TNAME.config ] ;​​​​ 现在
+        echo“未找到configs/templates/$TNAME.config”
+        出口1
+        菲
+        cp -f 配置/模板/$TNAME.config .config
         sed -i 's/CONFIG_FIRMWARE_INCLUDE_OPENSSL_EXE=n/CONFIG_FIRMWARE_INCLUDE_OPENSSL_EXE=y/g' .config
-        ################################################################################################
+        #################################################### ####################################################
         #因不同型号配置功能不一样，所以先把配置项删除，如果你自己要添加其他的，也要写上删除这一条，切记！！！
-        ################################################################################################
+        #################################################### ################################################
         sed -i '/CONFIG_FIRMWARE_INCLUDE_MENTOHUST/d' .config #删除配置项MENTOHUST
         sed -i '/CONFIG_FIRMWARE_INCLUDE_SCUTCLIENT/d' .config #删除配置项SCUTCLIENT
         sed -i '/CONFIG_FIRMWARE_INCLUDE_SHADOWSOCKS/d' .config #删除配置项SS plus+
